@@ -216,6 +216,89 @@ app.post('/api/admin/login', async (req, res) => {
 });
 
 
+
+
+
+
+
+// Backend route (Express)
+app.put('/api/bookings/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const booking = await Booking.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    // Prevent updates on cancelled bookings
+    if (booking.status === 'Cancelled') {
+      return res.status(400).json({ message: 'Cannot update status of a cancelled booking.' });
+    }
+
+    // Handle cancellation logic
+    if (status === 'Cancelled') {
+      const bookingDate = new Date(booking.date);
+      const currentDate = new Date();
+      const differenceInTime = currentDate.getTime() - bookingDate.getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+      if (differenceInDays > 2) {
+        return res.status(400).json({
+          message: 'Booking cannot be cancelled after 2 days from confirmation.',
+        });
+      }
+    }
+
+    // Set deliveredDate to current date if status is "Delivered"
+    if (status === 'Delivered') {
+      booking.deliveredDate = new Date();
+    }
+
+    // Update the status
+    booking.status = status;
+
+    // Use validateModifiedOnly to validate only modified fields
+    const updatedBooking = await booking.save({ validateModifiedOnly: true });
+
+    res.status(200).json(updatedBooking);
+  } catch (error) {
+    console.error('Error updating booking:', error);
+    res.status(500).json({ message: 'Failed to update booking.' });
+  }
+});
+
+
+
+app.put('/api/bookings/cancel/:id', async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+
+    // Fetch the booking to check the status
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).send('Booking not found.');
+    }
+
+    // Allow cancellation only if the status is Pending or Active
+    if (booking.status !== 'Pending' && booking.status !== 'Active') {
+      return res.status(400).send('Booking can only be cancelled when it is Pending or Active.');
+    }
+
+    // Update booking status to "Cancelled"
+    booking.status = 'Cancelled';
+    await booking.save();
+
+    res.status(200).send(booking);
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    res.status(500).send('Failed to cancel booking.');
+  }
+});
+
 // Start the Server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

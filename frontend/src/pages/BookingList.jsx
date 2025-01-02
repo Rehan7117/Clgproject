@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Invoice from './Invoice'; // Assuming the Invoice component is in the same directory
-import './bookinglist.css'; // Ensure this file exists and is properly styled
+import Invoice from './Invoice'; // Assuming the Invoice component exists
+import './bookinglist.css';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visibleBookings, setVisibleBookings] = useState({}); // State to track visibility of user bookings
+  const [error, setError] = useState(null);
+  const [visibleBookings, setVisibleBookings] = useState({});
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/api/bookings');
-        setBookings(response.data);
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Fetch bookings from the backend
+  const fetchBookings = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:3001/api/bookings');
+      setBookings(response.data);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError('Failed to fetch bookings.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchBookings();
-  }, []);
-
-  // Toggle visibility of bookings for a specific user
+  // Toggle visibility of bookings for a specific username
   const toggleBookingsVisibility = (username) => {
     setVisibleBookings((prev) => ({
       ...prev,
@@ -31,9 +31,14 @@ const BookingList = () => {
     }));
   };
 
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
   return (
     <div className="booking-list-container">
       <h2>All Bookings</h2>
+      {error && <p className="error-message">{error}</p>}
       {loading ? (
         <p>Loading bookings...</p>
       ) : (
@@ -46,12 +51,9 @@ const BookingList = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Group bookings by username */}
             {Object.entries(
               bookings.reduce((acc, booking) => {
-                if (!acc[booking.username]) {
-                  acc[booking.username] = [];
-                }
+                if (!acc[booking.username]) acc[booking.username] = [];
                 acc[booking.username].push(booking);
                 return acc;
               }, {})
@@ -69,30 +71,40 @@ const BookingList = () => {
                       <table className="nested-booking-table">
                         <thead>
                           <tr>
+                            <th>ID</th>
                             <th>Email</th>
-                            <th>Pickup Location</th>
+                            <th>Pickup</th>
                             <th>Pickup Phone</th>
-                            <th>Drop Location</th>
+                            <th>Drop</th>
                             <th>Drop Phone</th>
                             <th>Date</th>
                             <th>Price</th>
-                            <th>Invoice</th> {/* Invoice generation column */}
+                            <th>Status</th>
+                            <th>Delivered Date</th>
+                            <th>Invoice</th>
                           </tr>
                         </thead>
                         <tbody>
                           {userBookings.map((booking) => (
-                           <tr key={booking._id}>
-                           <td>{booking.email}</td>
-                           <td>{booking.pickupLocation}</td>
-                           <td>{booking.pickupPhone}</td> {/* Updated to correct field name */}
-                           <td>{booking.dropLocation}</td>
-                           <td>{booking.dropPhone}</td>   {/* Updated to correct field name */}
-                           <td>{new Date(booking.date).toLocaleDateString()}</td>
-                           <td>₹{booking.price}</td>
-                           <td>
-                             <Invoice bookingData={booking} />
-                           </td>
-                         </tr>
+                            <tr key={booking._id}>
+                              <td>{booking._id}</td>
+                              <td>{booking.email}</td>
+                              <td>{booking.pickupLocation}</td>
+                              <td>{booking.pickupPhone || 'N/A'}</td>
+                              <td>{booking.dropLocation}</td>
+                              <td>{booking.dropPhone || 'N/A'}</td>
+                              <td>{new Date(booking.date).toLocaleDateString()}</td>
+                              <td>₹{booking.price}</td>
+                              <td>{booking.status || 'Pending'}</td>
+                              <td>
+                                {booking.status === 'Delivered'
+                                  ? new Date(booking.deliveredDate).toLocaleDateString()
+                                  : 'N/A'}
+                              </td>
+                              <td>
+                                <Invoice bookingData={booking} />
+                              </td>
+                            </tr>
                           ))}
                         </tbody>
                       </table>

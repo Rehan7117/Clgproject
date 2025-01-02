@@ -12,9 +12,11 @@ import BookingList from './pages/BookingList';
 import AdminDashboard from './Admin/AdminDashboard';
 import AdminLogin from './Admin/AdminLogin';
 import AdminRegister from './Admin/AdminRegister';
-import ProtectedRoute from './Admin/ProtectedRoute'; // Import the ProtectedRoute component
+import ProtectedRoute from './Admin/ProtectedRoute';
 import AboutUs from './pages/Aboutus';
-import History from './pages/History'; // Import the History component
+import History from './pages/History';
+import UpdateOrder from './Admin/UpdateOrder'; // Import UpdateOrder component
+import AllBookings from './Admin/AllBookings';
 
 function App() {
   return (
@@ -28,11 +30,23 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/history" element={<History />} /> 
+          <Route path="/history" element={<History />} />
+
+          {/* Protect UpdateOrder Route */}
+          <Route 
+            path="/update-order" 
+            element={
+              <ProtectedRoute>
+                <UpdateOrder />
+              </ProtectedRoute>
+            } 
+          />
 
           {/* Admin Protected Routes */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin-register" element={<AdminRegister />} />
+          <Route path="/bookings" element={<AllBookings />} />
+
 
           {/* Protect User List and Booking List */}
           <Route 

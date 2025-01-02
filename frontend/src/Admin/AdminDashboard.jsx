@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import UserList from '../pages/UserList';
 import BookingList from '../pages/BookingList';
 import AdminRegister from '../Admin/AdminRegister';
-// import TruckManagement from './TruckManagement'; // Import TruckManagement component
+import UpdateOrder from '../Admin/UpdateOrder'; // Import UpdateOrder component
+import AllBookings from '../Admin/AllBookings'; // Import AllBookings component
 import './adminDashboard.css';
 
 const AdminDashboard = () => {
@@ -14,10 +15,12 @@ const AdminDashboard = () => {
         return <UserList />;
       case 'bookings':
         return <BookingList />;
+      case 'all-bookings': // Add case for AllBookings
+        return <AllBookings />;
       case 'register':
         return <AdminRegister />;
-      // case 'truck-management':
-      //   return <TruckManagement />; // Render the TruckManagement component
+      case 'update-order': // Add case for UpdateOrder
+        return <UpdateOrder />;
       default:
         return <UserList />;
     }
@@ -41,17 +44,23 @@ const AdminDashboard = () => {
             Bookings
           </li>
           <li
+            className={activePage === 'all-bookings' ? 'active' : ''}
+            onClick={() => setActivePage('all-bookings')}
+          >
+            All Bookings
+          </li>
+          <li
             className={activePage === 'register' ? 'active' : ''}
             onClick={() => setActivePage('register')}
           >
             Register Admin
           </li>
-          {/* <li
-            className={activePage === 'truck-management' ? 'active' : ''}
-            onClick={() => setActivePage('truck-management')}
+          <li
+            className={activePage === 'update-order' ? 'active' : ''}
+            onClick={() => setActivePage('update-order')}
           >
-            Truck Management
-          </li> */}
+            Update Order
+          </li>
         </ul>
       </div>
       <div className="content">{renderContent()}</div>

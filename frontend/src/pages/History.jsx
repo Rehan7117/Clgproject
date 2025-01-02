@@ -5,7 +5,7 @@ import Invoice from './Invoice'; // Assuming the Invoice component is in the sam
 import './history.css'; // Ensure this file exists and is properly styled
 
 const History = () => {
-  const { user } = useAuth();  // Get the current logged-in user from context
+  const { user } = useAuth(); // Get the current logged-in user from context
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleBookings, setVisibleBookings] = useState({}); // State to track visibility of user bookings
@@ -34,6 +34,25 @@ const History = () => {
       ...prev,
       [username]: !prev[username],
     }));
+  };
+
+  // Handle booking cancellation
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      const response = await axios.put(`http://localhost:3001/api/bookings/cancel/${bookingId}`);
+      if (response.status === 200) {
+        // Update the bookings list to reflect the cancellation
+        setBookings((prevBookings) =>
+          prevBookings.map((booking) =>
+            booking._id === bookingId ? { ...booking, status: 'Cancelled' } : booking
+          )
+        );
+        alert('Booking cancelled successfully.');
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      alert('Failed to cancel the booking.');
+    }
   };
 
   return (
@@ -81,7 +100,8 @@ const History = () => {
                             <th>Drop Phone</th>
                             <th>Date</th>
                             <th>Price</th>
-                            <th>Invoice</th> {/* Invoice generation column */}
+                            <th>Status</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -94,7 +114,16 @@ const History = () => {
                               <td>{booking.dropPhone}</td>
                               <td>{new Date(booking.date).toLocaleDateString()}</td>
                               <td>₹{booking.price}</td>
+                              <td>{booking.status || 'Active'}</td>
                               <td>
+                                {booking.status !== 'Cancelled' && (
+                                  <button
+                                    className="cancel-button"
+                                    onClick={() => handleCancelBooking(booking._id)}
+                                  >
+                                    Cancel
+                                  </button>
+                                )}
                                 <Invoice bookingData={booking} />
                               </td>
                             </tr>

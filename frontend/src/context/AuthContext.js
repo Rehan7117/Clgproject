@@ -9,16 +9,17 @@ export const useAuth = () => useContext(AuthContext);
 
 // AuthProvider component to wrap your app
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);  // State for regular user
-  const [admin, setAdmin] = useState(null);  // State for admin
+  const [user, setUser] = useState(null); // State for regular user
+  const [admin, setAdmin] = useState(null); // State for admin
+  const [loading, setLoading] = useState(true); // State for loading during token verification
 
   // Function to load user and admin from token when the app initializes
   const loadUserFromToken = async () => {
-    const userToken = localStorage.getItem('token');  // For regular user
-    const adminToken = localStorage.getItem('adminToken');  // For admin
+    const userToken = localStorage.getItem('token'); // For regular user
+    const adminToken = localStorage.getItem('adminToken'); // For admin
 
-    if (adminToken) {
-      try {
+    try {
+      if (adminToken) {
         // Fetch admin details based on the admin token
         const response = await axios.get('http://localhost:3001/api/admin/me', {
           headers: {
@@ -26,12 +27,7 @@ export const AuthProvider = ({ children }) => {
           },
         });
         setAdmin(response.data.admin); // Set admin data
-      } catch (error) {
-        console.error('Error loading admin from token:', error);
-        logout();  // Log out if token is invalid or expired
-      }
-    } else if (userToken) {
-      try {
+      } else if (userToken) {
         // Fetch regular user details based on the user token
         const response = await axios.get('http://localhost:3001/api/auth/me', {
           headers: {
@@ -39,10 +35,14 @@ export const AuthProvider = ({ children }) => {
           },
         });
         setUser(response.data.user); // Set user data
-      } catch (error) {
-        console.error('Error loading user from token:', error);
-        logout();  // Log out if token is invalid or expired
       }
+    } catch (error) {
+      console.error('Error loading user or admin from token:', error);
+      // Remove invalid tokens
+      if (adminToken) localStorage.removeItem('adminToken');
+      if (userToken) localStorage.removeItem('token');
+    } finally {
+      setLoading(false); // Set loading to false once processing is complete
     }
   };
 
@@ -115,7 +115,6 @@ export const AuthProvider = ({ children }) => {
     setAdmin(null);
     localStorage.removeItem('token'); // Remove user token from local storage
     localStorage.removeItem('adminToken'); // Remove admin token from local storage
-    alert('Logged out successfully.');
   };
 
   // Auth context value
@@ -128,6 +127,11 @@ export const AuthProvider = ({ children }) => {
     adminLogin,
     logout,
   };
+
+  if (loading) {
+    // Show a loading indicator while verifying tokens
+    return <div>Loading...</div>;
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

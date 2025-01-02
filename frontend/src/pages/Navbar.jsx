@@ -22,8 +22,7 @@ const Navbar = () => {
         )}
         <Link to="/contact" className="navbar-link">Contact</Link>
         <Link to="/about" className="navbar-link">About Us</Link>
-        {/* {user && <Link to="/history" className="navbar-link">Booking History</Link>} Link to Booking History */}
-
+        {user && <Link to="/history" className="navbar-link">Booking History</Link>} 
       </div>
       <div className="navbar-center">
         <h1 className="navbar-heading">Transportation Service</h1>
