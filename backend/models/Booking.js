@@ -63,6 +63,10 @@ const BookingSchema = new mongoose.Schema(
       type: Date,
       default: null, // Set null initially
     },
+    image: { // Moved into the main schema object
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

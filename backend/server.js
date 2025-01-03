@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bcrypt = require('bcryptjs'); // Import bcrypt
-
+const multer = require('multer');
+const path = require('path');
 // Load environment variables from .env file
 dotenv.config();
 
@@ -138,40 +139,71 @@ app.get('/api/bookings', async (req, res) => {
   }
 });
 
-// Create a booking
-app.post('/api/bookings', async (req, res) => {
-  const { username, email, pickupLocation, pickupPhone, dropLocation, dropPhone, goodsType, weight, date, price } = req.body;
 
-  try {
-    // Find the number of bookings for the given date
-    const bookingsOnDate = await Booking.find({ date: new Date(date) }).countDocuments();
 
-    // Check if the limit of 10 bookings has been reached
-    if (bookingsOnDate >= 3) {
-      return res.status(400).json({ message: 'No more bookings available for this date. Please choose another date.' });
+  // Configure multer storage
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/'); // Directory where files will be stored
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
+
+  // File filter to accept only images
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
     }
+  };
 
-    // If less than 10 bookings, create the booking
-    const booking = new Booking({
-      username,
-      email,
-      pickupLocation,
-      pickupPhone,
-      dropLocation,
-      dropPhone,
-      goodsType,
-      weight,
-      date,
-      price,
-    });
+  const upload = multer({ storage, fileFilter });
 
-    await booking.save();
-    res.status(201).json({ message: 'Booking created successfully', booking });
-  } catch (error) {
-    console.error('Error creating booking:', error.message);
-    res.status(500).json({ message: 'Error creating booking', error: error.message });
-  }
-});
+  // Create a booking with image upload
+  app.post('/api/bookings', upload.single('image'), async (req, res) => {
+    const { username, email, pickupLocation, pickupPhone, dropLocation, dropPhone, goodsType, weight, date, price } = req.body;
+
+    try {
+      // Find the number of bookings for the given date
+      const bookingsOnDate = await Booking.find({ date: new Date(date) }).countDocuments();
+
+      // Check if the limit of 3 bookings has been reached
+      if (bookingsOnDate >= 3) {
+        return res.status(400).json({ message: 'No more bookings available for this date. Please choose another date.' });
+      }
+
+      // Handle image upload
+      const imageUrl = req.file ? `uploads/${req.file.filename}` : null;
+
+      // If less than 3 bookings, create the booking
+      const booking = new Booking({
+        username,
+        email,
+        pickupLocation,
+        pickupPhone,
+        dropLocation,
+        dropPhone,
+        goodsType,
+        weight,
+        date,
+        price,
+        image: imageUrl, // Store image URL in the database
+      });
+
+      await booking.save();
+      res.status(201).json({ message: 'Booking created successfully', booking });
+    } catch (error) {
+      console.error('Error creating booking:', error.message);
+      res.status(500).json({ message: 'Error creating booking', error: error.message });
+    }
+  });
+
+  // show uploads image in the according to booking id 
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Admin Registration Route
 app.post('/api/admin/register', async (req, res) => {

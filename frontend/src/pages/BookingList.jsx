@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Invoice from './Invoice'; // Assuming the Invoice component exists
+import Invoice from './Invoice';
 import './bookinglist.css';
 
 const BookingList = () => {
@@ -81,6 +81,7 @@ const BookingList = () => {
                             <th>Price</th>
                             <th>Status</th>
                             <th>Delivered Date</th>
+                            <th>Image</th>
                             <th>Invoice</th>
                           </tr>
                         </thead>
@@ -100,6 +101,17 @@ const BookingList = () => {
                                 {booking.status === 'Delivered'
                                   ? new Date(booking.deliveredDate).toLocaleDateString()
                                   : 'N/A'}
+                              </td>
+                              <td>
+                                {booking.image ? (
+                                  <img
+                                    src={`http://localhost:3001/${booking.image}`}
+                                    alt="Booking"
+                                    className="booking-image"
+                                  />
+                                ) : (
+                                  'No Image'
+                                )}
                               </td>
                               <td>
                                 <Invoice bookingData={booking} />

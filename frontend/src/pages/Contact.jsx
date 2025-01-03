@@ -13,11 +13,11 @@ const Contact = () => {
   const [goodsType, setGoodsType] = useState('');
   const [weight, setWeight] = useState('');
   const [date, setDate] = useState('');
-  // const [time, setTime] = useState('');
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState(user?.email || '');
   const [username, setUsername] = useState(user?.username || '');
-  const [bookingConfirmed, setBookingConfirmed] = useState(false); // New state for booking confirmation
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [image, setImage] = useState(null); // State for uploaded image
 
   useEffect(() => {
     if (user) {
@@ -63,29 +63,31 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('pickupLocation', pickupLocation);
+    formData.append('dropLocation', dropLocation);
+    formData.append('pickupPhone', pickupPhone);
+    formData.append('dropPhone', dropPhone);
+    formData.append('goodsType', goodsType);
+    formData.append('weight', weight);
+    formData.append('date', date);
+    formData.append('price', price);
+    formData.append('email', email);
+    if (image) formData.append('image', image);
+
     try {
-      await axios.post('http://localhost:3001/api/bookings', {
-        username,
-        pickupLocation,
-        dropLocation,
-        pickupPhone,
-        dropPhone,
-        goodsType,
-        weight,
-        date,
-        price,
-        email,
+      await axios.post('http://localhost:3001/api/bookings', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-  
       alert('Booking Confirmed!');
-      setBookingConfirmed(true); // Set booking confirmed to true
+      setBookingConfirmed(true);
     } catch (error) {
       console.error('Error creating booking:', error);
       alert(error.response?.data?.message || 'Error creating booking. Please try again.');
     }
   };
-  
+
   const bookingData = {
     username,
     email,
@@ -97,18 +99,9 @@ const Contact = () => {
     weight,
     date,
     price,
+    image,
   };
 
-  // const fetchUserBookings = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:3001/api/user/bookings`, {
-  //       headers: { Authorization: `Bearer ${user.token}` }, // Assuming you're using token-based auth
-  //     });
-  //     setUserBookings(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching user bookings:', error);
-  //   }
-  // };
   return (
     <div className="contact-us-container">
       <h2>Book a Truck</h2>
@@ -137,7 +130,7 @@ const Contact = () => {
             <input
               type="text"
               value={pickupLocation}
-              placeholder='Pickup only from pune'
+              placeholder="Pickup only from Pune"
               onChange={(e) => setPickupLocation(e.target.value)}
               required
             />
@@ -217,19 +210,23 @@ const Contact = () => {
               required
             />
           </div>
-          
           <div className="form-group">
             <label>Price:</label>
+            <input type="number" value={price} readOnly />
+          </div>
+          <div className="form-group">
+            <label>Upload Image:</label>
             <input
-              type="number"
-              value={price}
-              readOnly
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
             />
           </div>
-          <button type="submit" className="submit-btn">Confirm Booking</button>
+          <button type="submit" className="submit-btn">
+            Confirm Booking
+          </button>
         </form>
       ) : (
-        <Invoice bookingData={bookingData} /> // Render the Invoice component after booking confirmation
+        <Invoice bookingData={bookingData} />
       )}
     </div>
   );

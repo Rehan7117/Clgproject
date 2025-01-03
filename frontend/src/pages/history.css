@@ -111,3 +111,9 @@
     font-size: 13px; /* Slightly larger header text for visibility */
   }
 }
+.booking-image {
+  width: 100px;
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+}

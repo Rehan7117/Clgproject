@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import './bookinglist.css';
+
 
 const AllBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -99,6 +99,7 @@ const AllBookings = () => {
               <th>Date</th>
               <th>Price</th>
               <th>Status</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
@@ -114,6 +115,17 @@ const AllBookings = () => {
                 <td>{new Date(booking.date).toLocaleDateString()}</td>
                 <td>₹{booking.price}</td>
                 <td>{booking.status || 'Pending'}</td>
+                <td>
+                  {booking.image ? (
+                    <img
+                    src={`http://localhost:3001/${booking.image}`}
+                    alt="Booking"
+                      style={{ width: '100px', height: 'auto' }}
+                    />
+                  ) : (
+                    'No Image'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
