@@ -93,7 +93,7 @@ const History = () => {
                             <th>Pickup Phone</th>
                             <th>Drop Location</th>
                             <th>Drop Phone</th>
-                            <th>Date</th>
+                            <th>Booking Date</th>
                             <th>Price</th>
                             <th>Status</th>
                             <th>Image</th>
@@ -105,17 +105,21 @@ const History = () => {
                             <tr key={booking._id}>
                               <td>{booking.email}</td>
                               <td>{booking.pickupLocation}</td>
-                              <td>{booking.pickupPhone}</td>
+                              <td>{booking.pickupPhone || 'N/A'}</td>
                               <td>{booking.dropLocation}</td>
-                              <td>{booking.dropPhone}</td>
-                              <td>{new Date(booking.date).toLocaleDateString()}</td>
+                              <td>{booking.dropPhone || 'N/A'}</td>
+                              <td>
+                                {booking.createdAt
+                                  ? new Date(booking.createdAt).toLocaleDateString()
+                                  : 'N/A'}
+                              </td>
                               <td>₹{booking.price}</td>
                               <td>{booking.status || 'Active'}</td>
                               <td>
                                 {booking.image ? (
                                   <img
-                                  src={`http://localhost:3001/${booking.image}`}
-                                  alt="Booking"
+                                    src={`http://localhost:3001/${booking.image}`}
+                                    alt="Booking"
                                     className="booking-image"
                                   />
                                 ) : (

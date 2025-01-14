@@ -25,7 +25,7 @@ const Navbar = () => {
         {user && <Link to="/history" className="navbar-link">Booking History</Link>} 
       </div>
       <div className="navbar-center">
-        <h1 className="navbar-heading">Transportation Service</h1>
+        <h1 className="navbar-heading">RidHub Service</h1>
       </div>
       <div className="navbar-right">
         {user ? (

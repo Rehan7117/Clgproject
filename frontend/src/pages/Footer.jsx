@@ -7,11 +7,11 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer0">
-        <h1>Transportation Service</h1>
+        <h1>RidHub Service</h1>
       </div>
      
       <div className="footer3">
-        Copyright © <h4>Transportation online Service</h4> 2024
+         <h4>Copyright © RidHub Service 2024</h4> 
       </div>
     </footer>
   );

@@ -23,7 +23,7 @@ const Home = () => {
   return (
     <div className="home">
       <header className="header">
-        <h1>Welcome to Our Transportation Services</h1>
+        <h1>Welcome to Our RidHub Services</h1>
         <p>Reliable pickup and drop services across six states of India.</p>
       </header>
 

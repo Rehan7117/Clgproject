@@ -164,21 +164,11 @@ app.get('/api/bookings', async (req, res) => {
 
   // Create a booking with image upload
   app.post('/api/bookings', upload.single('image'), async (req, res) => {
-    const { username, email, pickupLocation, pickupPhone, dropLocation, dropPhone, goodsType, weight, date, price } = req.body;
-
+    const { username, email, pickupLocation, pickupPhone, dropLocation, dropPhone, goodsType, weight, price } = req.body;
+  
     try {
-      // Find the number of bookings for the given date
-      const bookingsOnDate = await Booking.find({ date: new Date(date) }).countDocuments();
-
-      // Check if the limit of 3 bookings has been reached
-      if (bookingsOnDate >= 3) {
-        return res.status(400).json({ message: 'No more bookings available for this date. Please choose another date.' });
-      }
-
-      // Handle image upload
       const imageUrl = req.file ? `uploads/${req.file.filename}` : null;
-
-      // If less than 3 bookings, create the booking
+  
       const booking = new Booking({
         username,
         email,
@@ -188,11 +178,10 @@ app.get('/api/bookings', async (req, res) => {
         dropPhone,
         goodsType,
         weight,
-        date,
         price,
-        image: imageUrl, // Store image URL in the database
+        image: imageUrl,
       });
-
+  
       await booking.save();
       res.status(201).json({ message: 'Booking created successfully', booking });
     } catch (error) {
@@ -200,7 +189,7 @@ app.get('/api/bookings', async (req, res) => {
       res.status(500).json({ message: 'Error creating booking', error: error.message });
     }
   });
-
+  
   // show uploads image in the according to booking id 
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -315,9 +304,9 @@ app.put('/api/bookings/cancel/:id', async (req, res) => {
       return res.status(404).send('Booking not found.');
     }
 
-    // Allow cancellation only if the status is Pending or Active
-    if (booking.status !== 'Pending' && booking.status !== 'Active') {
-      return res.status(400).send('Booking can only be cancelled when it is Pending or Active.');
+    // Allow cancellation only if the status is Pending
+    if (booking.status !== 'Pending') {
+      return res.status(400).send('Booking can only be cancelled when it is Pending.');
     }
 
     // Update booking status to "Cancelled"

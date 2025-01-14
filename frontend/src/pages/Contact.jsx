@@ -12,7 +12,6 @@ const Contact = () => {
   const [dropPhone, setDropPhone] = useState('');
   const [goodsType, setGoodsType] = useState('');
   const [weight, setWeight] = useState('');
-  const [date, setDate] = useState('');
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState(user?.email || '');
   const [username, setUsername] = useState(user?.username || '');
@@ -71,7 +70,6 @@ const Contact = () => {
     formData.append('dropPhone', dropPhone);
     formData.append('goodsType', goodsType);
     formData.append('weight', weight);
-    formData.append('date', date);
     formData.append('price', price);
     formData.append('email', email);
     if (image) formData.append('image', image);
@@ -97,7 +95,6 @@ const Contact = () => {
     dropPhone,
     goodsType,
     weight,
-    date,
     price,
     image,
   };
@@ -202,15 +199,6 @@ const Contact = () => {
             </select>
           </div>
           <div className="form-group">
-            <label>Date:</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
             <label>Price:</label>
             <input type="number" value={price} readOnly />
           </div>
@@ -233,3 +221,4 @@ const Contact = () => {
 };
 
 export default Contact;
+ // AIzaSyAVKMaD2kNC6TjgozA3QL8YlHb7iDSP3_c

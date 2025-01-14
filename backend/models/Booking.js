@@ -46,24 +46,20 @@ const BookingSchema = new mongoose.Schema(
       required: true,
       enum: ['0-500kg', '500-1000kg', '1000-1500kg', '1500-2000kg', 'Over 2000kg'],
     },
-    date: {
-      type: Date,
-      required: true,
-    },
     price: {
       type: Number,
       required: true,
     },
     status: {
       type: String,
-      default: 'Active',
-      enum: ['Active', 'Pending', 'Shipped', 'Delivered', 'Cancelled'],
+      default: 'Pending',  // Default status is now Pending instead of Active
+      enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],  // Removed 'Active' from the enum
     },
     deliveredDate: {
       type: Date,
       default: null, // Set null initially
     },
-    image: { // Moved into the main schema object
+    image: {
       type: String,
       required: false,
     },

@@ -77,7 +77,7 @@ const BookingList = () => {
                             <th>Pickup Phone</th>
                             <th>Drop</th>
                             <th>Drop Phone</th>
-                            <th>Date</th>
+                            <th>Booking Date</th> {/* Updated header */}
                             <th>Price</th>
                             <th>Status</th>
                             <th>Delivered Date</th>
@@ -94,7 +94,7 @@ const BookingList = () => {
                               <td>{booking.pickupPhone || 'N/A'}</td>
                               <td>{booking.dropLocation}</td>
                               <td>{booking.dropPhone || 'N/A'}</td>
-                              <td>{new Date(booking.date).toLocaleDateString()}</td>
+                              <td>{new Date(booking.createdAt).toLocaleDateString()}</td> {/* Display createdAt */}
                               <td>₹{booking.price}</td>
                               <td>{booking.status || 'Pending'}</td>
                               <td>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 const AllBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
@@ -28,14 +27,16 @@ const AllBookings = () => {
   const filterBookings = () => {
     let filtered = bookings;
 
+    // Filter by date
     if (filterDate) {
       filtered = filtered.filter(
         (booking) =>
-          new Date(booking.date).toLocaleDateString() ===
+          new Date(booking.createdAt).toLocaleDateString() ===
           new Date(filterDate).toLocaleDateString()
       );
     }
 
+    // Filter by status
     if (filterStatus !== 'All') {
       filtered = filtered.filter((booking) => booking.status === filterStatus);
     }
@@ -75,7 +76,7 @@ const AllBookings = () => {
           >
             <option value="All">All</option>
             <option value="Pending">Pending</option>
-            <option value="Active">Active</option>
+            {/* <option value="Active">Active</option> */}
             <option value="Shipped">Shipped</option>
             <option value="Delivered">Delivered</option>
             <option value="Cancelled">Cancelled</option>
@@ -96,7 +97,7 @@ const AllBookings = () => {
               <th>Pickup Phone</th>
               <th>Drop</th>
               <th>Drop Phone</th>
-              <th>Date</th>
+              <th>Booking Date</th> {/* Updated column name */}
               <th>Price</th>
               <th>Status</th>
               <th>Image</th>
@@ -112,14 +113,14 @@ const AllBookings = () => {
                 <td>{booking.pickupPhone || 'N/A'}</td>
                 <td>{booking.dropLocation}</td>
                 <td>{booking.dropPhone || 'N/A'}</td>
-                <td>{new Date(booking.date).toLocaleDateString()}</td>
+                <td>{new Date(booking.createdAt).toLocaleDateString()}</td> {/* Display createdAt */}
                 <td>₹{booking.price}</td>
                 <td>{booking.status || 'Pending'}</td>
                 <td>
                   {booking.image ? (
                     <img
-                    src={`http://localhost:3001/${booking.image}`}
-                    alt="Booking"
+                      src={`http://localhost:3001/${booking.image}`}
+                      alt="Booking"
                       style={{ width: '100px', height: 'auto' }}
                     />
                   ) : (
