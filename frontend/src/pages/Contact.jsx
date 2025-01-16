@@ -15,8 +15,10 @@ const Contact = () => {
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState(user?.email || '');
   const [username, setUsername] = useState(user?.username || '');
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
-  const [image, setImage] = useState(null); // State for uploaded image
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading indicator
 
   useEffect(() => {
     if (user) {
@@ -38,16 +40,24 @@ const Contact = () => {
     let weightIncrement = 500;
     let weightFactor = 0;
 
-    if (weight === '0-500kg') {
-      weightFactor = 1;
-    } else if (weight === '500-1000kg') {
-      weightFactor = 2;
-    } else if (weight === '1000-1500kg') {
-      weightFactor = 3;
-    } else if (weight === '1500-2000kg') {
-      weightFactor = 4;
-    } else if (weight === 'Over 2000kg') {
-      weightFactor = 5;
+    switch (weight) {
+      case '0-500kg':
+        weightFactor = 1;
+        break;
+      case '500-1000kg':
+        weightFactor = 2;
+        break;
+      case '1000-1500kg':
+        weightFactor = 3;
+        break;
+      case '1500-2000kg':
+        weightFactor = 4;
+        break;
+      case 'Over 2000kg':
+        weightFactor = 5;
+        break;
+      default:
+        weightFactor = 0;
     }
 
     const calculatedWeightPrice = weightFactor * weightIncrement;
@@ -60,8 +70,22 @@ const Contact = () => {
     calculatePrice();
   }, [pickupLocation, dropLocation, goodsType, weight]);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 2 * 1024 * 1024) {
+      alert('File size should be less than 2MB.');
+      return;
+    }
+    setImage(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!paymentMethod) {
+      alert('Please select a payment method!');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('username', username);
     formData.append('pickupLocation', pickupLocation);
@@ -72,8 +96,10 @@ const Contact = () => {
     formData.append('weight', weight);
     formData.append('price', price);
     formData.append('email', email);
+    formData.append('paymentMethod', paymentMethod);
     if (image) formData.append('image', image);
 
+    setLoading(true);
     try {
       await axios.post('http://localhost:3001/api/bookings', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -83,6 +109,8 @@ const Contact = () => {
     } catch (error) {
       console.error('Error creating booking:', error);
       alert(error.response?.data?.message || 'Error creating booking. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,31 +124,23 @@ const Contact = () => {
     goodsType,
     weight,
     price,
+    paymentMethod,
     image,
   };
 
   return (
     <div className="contact-us-container">
       <h2>Book a Truck</h2>
+      {loading && <p>Loading...</p>}
       {!bookingConfirmed ? (
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
             <label>Username:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled
-            />
+            <input type="text" value={username} disabled />
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled
-            />
+            <input type="email" value={email} disabled />
           </div>
           <div className="form-group">
             <label>Pickup Location:</label>
@@ -140,6 +160,7 @@ const Contact = () => {
               onChange={(e) => setPickupPhone(e.target.value)}
               required
               placeholder="Enter pickup phone number"
+
               pattern="[0-9]{10}"
               title="Enter a 10-digit phone number"
             />
@@ -166,6 +187,7 @@ const Contact = () => {
               onChange={(e) => setDropPhone(e.target.value)}
               required
               placeholder="Enter drop phone number"
+
               pattern="[0-9]{10}"
               title="Enter a 10-digit phone number"
             />
@@ -181,6 +203,11 @@ const Contact = () => {
               <option value="Fragile">Fragile</option>
               <option value="Solid">Solid</option>
               <option value="Liquid">Liquid</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Food">Food</option>
+              <option value="Perishable">Perishable</option>
             </select>
           </div>
           <div className="form-group">
@@ -203,13 +230,22 @@ const Contact = () => {
             <input type="number" value={price} readOnly />
           </div>
           <div className="form-group">
-            <label>Upload Image:</label>
-            <input
-              type="file"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
+            <label>Payment Method:</label>
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              required
+            >
+              <option value="">Select Payment</option>
+              <option value="Collect Cash on Pickup">Collect Cash on Pickup</option>
+              <option value="Collect Cash on Drop">Collect Cash on Drop</option>
+            </select>
           </div>
-          <button type="submit" className="submit-btn">
+          <div className="form-group">
+            <label>Upload Image:</label>
+            <input type="file" onChange={handleFileChange} />
+          </div>
+          <button type="submit" className="submit-btn" disabled={loading}>
             Confirm Booking
           </button>
         </form>
@@ -221,4 +257,3 @@ const Contact = () => {
 };
 
 export default Contact;
- // AIzaSyAVKMaD2kNC6TjgozA3QL8YlHb7iDSP3_c

@@ -164,11 +164,24 @@ app.get('/api/bookings', async (req, res) => {
 
   // Create a booking with image upload
   app.post('/api/bookings', upload.single('image'), async (req, res) => {
-    const { username, email, pickupLocation, pickupPhone, dropLocation, dropPhone, goodsType, weight, price } = req.body;
+    const { 
+      username, 
+      email, 
+      pickupLocation, 
+      pickupPhone, 
+      dropLocation, 
+      dropPhone, 
+      goodsType, 
+      weight, 
+      price, 
+      paymentMethod // Include paymentMethod
+    } = req.body;
   
     try {
+      // If a file is uploaded, set the image URL
       const imageUrl = req.file ? `uploads/${req.file.filename}` : null;
   
+      // Create a new booking document
       const booking = new Booking({
         username,
         email,
@@ -179,10 +192,14 @@ app.get('/api/bookings', async (req, res) => {
         goodsType,
         weight,
         price,
+        paymentMethod, // Include paymentMethod in the booking document
         image: imageUrl,
       });
   
+      // Save the booking to the database
       await booking.save();
+  
+      // Respond with a success message and the booking data
       res.status(201).json({ message: 'Booking created successfully', booking });
     } catch (error) {
       console.error('Error creating booking:', error.message);

@@ -20,7 +20,7 @@ const Navbar = () => {
         {user && user.isAdmin && (
           <Link to="/admin/dashboard" className="navbar-link">Admin Dashboard</Link>
         )}
-        <Link to="/contact" className="navbar-link">Contact</Link>
+        <Link to="/contact" className="navbar-link">Book a service</Link>
         <Link to="/about" className="navbar-link">About Us</Link>
         {user && <Link to="/history" className="navbar-link">Booking History</Link>} 
       </div>

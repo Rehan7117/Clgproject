@@ -39,7 +39,7 @@ const BookingSchema = new mongoose.Schema(
     goodsType: {
       type: String,
       required: true,
-      enum: ['Fragile', 'Solid', 'Liquid'],
+      enum: ['Fragile', 'Solid', 'Liquid', 'Electronics', 'Furniture', 'Clothing', 'Food', 'Perishable'],
     },
     weight: {
       type: String,
@@ -50,14 +50,19 @@ const BookingSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    paymentMethod: {
+      type: String,
+      required: true,
+      enum: ['Collect Cash on Pickup', 'Collect Cash on Drop'],
+    },
     status: {
       type: String,
-      default: 'Pending',  // Default status is now Pending instead of Active
-      enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],  // Removed 'Active' from the enum
+      default: 'Pending',
+      enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
     },
     deliveredDate: {
       type: Date,
-      default: null, // Set null initially
+      default: null,
     },
     image: {
       type: String,
