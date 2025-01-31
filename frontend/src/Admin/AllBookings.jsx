@@ -76,7 +76,6 @@ const AllBookings = () => {
           >
             <option value="All">All</option>
             <option value="Pending">Pending</option>
-            {/* <option value="Active">Active</option> */}
             <option value="Shipped">Shipped</option>
             <option value="Delivered">Delivered</option>
             <option value="Cancelled">Cancelled</option>
@@ -97,8 +96,10 @@ const AllBookings = () => {
               <th>Pickup Phone</th>
               <th>Drop</th>
               <th>Drop Phone</th>
-              <th>Booking Date</th> {/* Updated column name */}
+              <th>Booking Date</th>
               <th>Price</th>
+              <th>Payment Method</th> {/* New Payment Method column */}
+              <th>Goods Type</th> {/* New Goods Type column */}
               <th>Status</th>
               <th>Image</th>
             </tr>
@@ -113,8 +114,10 @@ const AllBookings = () => {
                 <td>{booking.pickupPhone || 'N/A'}</td>
                 <td>{booking.dropLocation}</td>
                 <td>{booking.dropPhone || 'N/A'}</td>
-                <td>{new Date(booking.createdAt).toLocaleDateString()}</td> {/* Display createdAt */}
+                <td>{new Date(booking.createdAt).toLocaleDateString()}</td>
                 <td>₹{booking.price}</td>
+                <td>{booking.paymentMethod || 'N/A'}</td> {/* Display Payment Method */}
+                <td>{booking.goodsType || 'N/A'}</td> {/* Display Goods Type */}
                 <td>{booking.status || 'Pending'}</td>
                 <td>
                   {booking.image ? (

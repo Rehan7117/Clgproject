@@ -77,8 +77,10 @@ const BookingList = () => {
                             <th>Pickup Phone</th>
                             <th>Drop</th>
                             <th>Drop Phone</th>
-                            <th>Booking Date</th> {/* Updated header */}
+                            <th>Booking Date</th>
                             <th>Price</th>
+                            <th>Goods Type</th> {/* New Goods Type column */}
+                            <th>Payment Method</th> {/* New Payment Method column */}
                             <th>Status</th>
                             <th>Delivered Date</th>
                             <th>Image</th>
@@ -94,8 +96,10 @@ const BookingList = () => {
                               <td>{booking.pickupPhone || 'N/A'}</td>
                               <td>{booking.dropLocation}</td>
                               <td>{booking.dropPhone || 'N/A'}</td>
-                              <td>{new Date(booking.createdAt).toLocaleDateString()}</td> {/* Display createdAt */}
+                              <td>{new Date(booking.createdAt).toLocaleDateString()}</td>
                               <td>₹{booking.price}</td>
+                              <td>{booking.goodsType || 'N/A'}</td> {/* Display Goods Type */}
+                              <td>{booking.paymentMethod || 'N/A'}</td> {/* Display payment method */}
                               <td>{booking.status || 'Pending'}</td>
                               <td>
                                 {booking.status === 'Delivered'

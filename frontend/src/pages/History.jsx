@@ -43,10 +43,10 @@ const History = () => {
             booking._id === bookingId ? { ...booking, status: 'Cancelled' } : booking
           )
         );
-        alert('Booking cancelled successfully.');
+        alert('Booking canceled successfully.');
       }
     } catch (error) {
-      console.error('Error cancelling booking:', error);
+      console.error('Error canceling booking:', error);
       alert('Failed to cancel the booking.');
     }
   };

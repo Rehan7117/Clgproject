@@ -41,7 +41,7 @@ const AdminDashboard = () => {
             className={activePage === 'bookings' ? 'active' : ''}
             onClick={() => setActivePage('bookings')}
           >
-            Bookings
+            User Bookings
           </li>
           <li
             className={activePage === 'all-bookings' ? 'active' : ''}

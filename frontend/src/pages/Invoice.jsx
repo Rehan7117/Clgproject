@@ -16,8 +16,8 @@ const Invoice = ({ bookingData }) => {
       dropPhone,
       goodsType,
       weight,
-      date,
       price,
+      status,
     } = bookingData;
 
     const doc = new jsPDF();
@@ -44,8 +44,8 @@ const Invoice = ({ bookingData }) => {
       ['Drop Phone', dropPhone],
       ['Goods Type', goodsType],
       ['Weight', weight],
-      ['Date', date],
       ['Price', `${price}`],
+      ['Status', status === 'Cancelled' ? 'Booking Cancelled' : 'Confirmed'],
     ];
 
     // Add the table to the PDF
@@ -70,16 +70,21 @@ const Invoice = ({ bookingData }) => {
       },
     });
 
-    // Add the confirmation message below the table
+    // Add the appropriate message below the table
+    const message =
+      status === 'Cancelled'
+        ? 'Your booking was canceled. If this is a mistake, please contact support.'
+        : 'Your booking was confirmed. We will contact you shortly.';
+
     doc.setFontSize(12);
     doc.setTextColor(0); // Reset text color to black
-    doc.text('Your booking was confirmed. We will contact you .', 14, doc.autoTable.previous.finalY + 10);
+    doc.text(message, 14, doc.autoTable.previous.finalY + 10);
 
     // Save the PDF
     doc.save('invoice.pdf');
 
     // Set confirmation message for UI
-    // setConfirmationMessage('Your booking was confirmed. We will contact you .');
+    setConfirmationMessage(message);
   };
 
   return (
