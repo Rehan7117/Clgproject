@@ -2,16 +2,31 @@ import React, { useState } from 'react';
 import './footer.css';
 
 const Footer = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Query submitted successfully!');
-    setFormData({ name: '', email: '', message: '' });
+    try {
+      const response = await fetch('http://localhost:3001/api/submit-query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Query submitted successfully!');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        alert('Failed to submit query');
+      }
+    } catch (error) {
+      console.error('Error submitting query:', error);
+      alert('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -32,8 +47,9 @@ const Footer = () => {
         </div>
 
         <div className="footer-column">
-          <h3>Have a Question?</h3>
           <form onSubmit={handleSubmit} className="query-form">
+          <h3>Have a Question?</h3>
+
             <input
               type="text"
               name="name"
@@ -50,6 +66,14 @@ const Footer = () => {
               onChange={handleChange}
               required
             />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Your Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
             <textarea
               name="message"
               placeholder="Your Message"
@@ -63,7 +87,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2024 RidHub Service. All Rights Reserved.</p>
+        <p>© 2024 RideHub Service. All Rights Reserved.</p>
       </div>
     </footer>
   );

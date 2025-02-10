@@ -33,6 +33,8 @@ app.use(cors()); // Use CORS middleware
 const User = require('./models/User');
 const Admin = require('./models/admin');
 const Booking = require('./models/Booking');
+const Query = require('./models/Query');
+
 
 // Middleware to verify if the user is an admin
 const verifyAdminToken = async (req, res, next) => {
@@ -336,6 +338,23 @@ app.put('/api/bookings/cancel/:id', async (req, res) => {
     res.status(500).send('Failed to cancel booking.');
   }
 });
+
+
+
+// Submit query
+app.post('/api/submit-query', async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body; // Added phone field
+    const newQuery = new Query({ name, email, phone, message }); // Included phone in the model
+    await newQuery.save();
+    
+    res.status(201).json({ success: true, message: 'Query submitted successfully!' });
+  } catch (error) {
+    console.error('Error saving query:', error);
+    res.status(500).json({ success: false, message: 'Server error. Please try again.' });
+  }
+});
+
 
 // Start the Server
 const PORT = process.env.PORT || 3001;

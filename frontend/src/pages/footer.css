@@ -1,6 +1,6 @@
 /* Footer Styling */
 .footer {
-  background: #6ca9d7;
+  background-color: #0066cc; /* Lighter blue background */
   color: white;
   padding: 30px 20px;
   font-family: Arial, sans-serif;
@@ -55,8 +55,8 @@
   border-radius: 4px;
   font-size: 13px;
   outline: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(88, 11, 231, 0.1);
+  color: rgba(22, 22, 22, 0.897);
 }
 
 .query-form textarea {
