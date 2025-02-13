@@ -1,11 +1,13 @@
 /* Base styles for the booking list */
 .booking-list-container {
   padding: 20px;
+  
 }
 
 .booking-list-table {
   width: 100%;
   border-collapse: collapse;
+  
 }
 
 .booking-list-table th, .booking-list-table td {
@@ -15,7 +17,7 @@
 }
 
 .booking-list-table th {
-  background-color:  #0066cc; /* Blue background for the table header */
+  background-color: #003366;
   color: #ffffff; /* White text for contrast */
 }
 

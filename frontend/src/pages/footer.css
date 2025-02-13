@@ -1,6 +1,6 @@
 /* Footer Styling */
 .footer {
-  background-color: #0066cc; /* Lighter blue background */
+  background-color: #003366; 
   color: white;
   padding: 30px 20px;
   font-family: Arial, sans-serif;
@@ -45,18 +45,21 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+
+  background-color: #003366; 
 }
 
 .query-form input,
 .query-form textarea {
   width: 100%;
-  padding: 8px;
-  border: none;
+  padding: 4px;
+  border: 0.1px solid white;
   border-radius: 4px;
+
   font-size: 13px;
   outline: none;
   background: rgba(88, 11, 231, 0.1);
-  color: rgba(22, 22, 22, 0.897);
+  color: rgb(245, 233, 233);
 }
 
 .query-form textarea {
@@ -70,19 +73,22 @@
 }
 
 .query-form button {
-  background: #f8b400;
-  color: black;
-  border: none;
+  background:#003366;
+  border: 2px solid white;
+  color: white;
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
   transition: 0.3s;
+  width: 352px;
 }
 
 .query-form button:hover {
-  background: #e0a200;
-}
+    color:white; 
+    border: 1px solid white;
+    border-radius: 4px;
+  }
 
 /* Footer Bottom */
 .footer-bottom {

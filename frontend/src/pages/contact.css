@@ -1,12 +1,17 @@
 .contact-us-container {
   width: 70%;
   margin: 0 auto;
-  color: #0066cc;
+  color: #003366;
+
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
+  box-shadow: 0 14px 20px #003366;
+  border: 2px solid #003366; /* Blue border */
+
+
 }
 
 .form-group {
@@ -16,14 +21,14 @@
 .form-group label {
   margin-bottom: 5px;
   font-weight: bold;
-  color: #0066cc; /* Blue text for labels */
+  color: #003366; /* Blue text for labels */
 }
 
 .form-group input,
 .form-group select {
   padding: 8px;
   width: 90%;
-  border: 1px solid #0066cc; /* Blue border */
+  border: 1.5px solid #003366; /* Blue border */
   border-radius: 4px;
   transition: border-color 0.3s; /* Smooth transition for focus effect */
 }
@@ -31,11 +36,13 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #007bff; /* Light blue on focus */
+  border-color: #003366; /* Light blue on focus */
+  box-shadow: 0 0 4px #003366;;
+
 }
 
 .submit-button {
-  background-color: #0066cc; /* Blue background for button */
+  background-color: #003366; /* Blue background for button */
   color: white; /* White text */
   padding: 10px 15px;
   border: none;
@@ -45,7 +52,10 @@
 }
 
 .submit-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #003366; /* Darker blue on hover */
+}
+.submit-btn{
+  background-color: #003366; /* Darker blue on hover */
 }
 
 /* Responsive styles */
