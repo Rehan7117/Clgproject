@@ -15,8 +15,9 @@ import AdminRegister from './Admin/AdminRegister';
 import ProtectedRoute from './Admin/ProtectedRoute';
 import AboutUs from './pages/Aboutus';
 import History from './pages/History';
-import UpdateOrder from './Admin/UpdateOrder'; // Import UpdateOrder component
+import UpdateOrder from './Admin/UpdateOrder';
 import AllBookings from './Admin/AllBookings';
+import AdminQueries from './Admin/AdminQueries'; // ✅ Import AdminQueries
 
 function App() {
   return (
@@ -47,7 +48,6 @@ function App() {
           <Route path="/admin-register" element={<AdminRegister />} />
           <Route path="/bookings" element={<AllBookings />} />
 
-
           {/* Protect User List and Booking List */}
           <Route 
             path="/users" 
@@ -72,6 +72,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* ✅ Admin Queries Page (New Route) */}
+          <Route 
+            path="/admin-queries" 
+            element={
+              <ProtectedRoute>
+                <AdminQueries />
               </ProtectedRoute>
             } 
           />

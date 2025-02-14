@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import UserList from '../pages/UserList';
 import BookingList from '../pages/BookingList';
 import AdminRegister from '../Admin/AdminRegister';
-import UpdateOrder from '../Admin/UpdateOrder'; // Import UpdateOrder component
-import AllBookings from '../Admin/AllBookings'; // Import AllBookings component
+import UpdateOrder from '../Admin/UpdateOrder';
+import AllBookings from '../Admin/AllBookings';
+import AdminQueries from '../Admin/AdminQueries'; // ✅ Import AdminQueries
 import './adminDashboard.css';
 
 const AdminDashboard = () => {
@@ -15,12 +16,14 @@ const AdminDashboard = () => {
         return <UserList />;
       case 'bookings':
         return <BookingList />;
-      case 'all-bookings': // Add case for AllBookings
+      case 'all-bookings':
         return <AllBookings />;
       case 'register':
         return <AdminRegister />;
-      case 'update-order': // Add case for UpdateOrder
+      case 'update-order':
         return <UpdateOrder />;
+      case 'queries': // ✅ Case for AdminQueries
+        return <AdminQueries />;
       default:
         return <UserList />;
     }
@@ -31,35 +34,23 @@ const AdminDashboard = () => {
       <div className="sidebar">
         <h2>Admin Dashboard</h2>
         <ul>
-          <li
-            className={activePage === 'users' ? 'active' : ''}
-            onClick={() => setActivePage('users')}
-          >
+          <li className={activePage === 'users' ? 'active' : ''} onClick={() => setActivePage('users')}>
             Users
           </li>
-          <li
-            className={activePage === 'bookings' ? 'active' : ''}
-            onClick={() => setActivePage('bookings')}
-          >
+          <li className={activePage === 'bookings' ? 'active' : ''} onClick={() => setActivePage('bookings')}>
             User Bookings
           </li>
-          <li
-            className={activePage === 'all-bookings' ? 'active' : ''}
-            onClick={() => setActivePage('all-bookings')}
-          >
+          <li className={activePage === 'all-bookings' ? 'active' : ''} onClick={() => setActivePage('all-bookings')}>
             All Bookings
           </li>
-          <li
-            className={activePage === 'register' ? 'active' : ''}
-            onClick={() => setActivePage('register')}
-          >
+          <li className={activePage === 'register' ? 'active' : ''} onClick={() => setActivePage('register')}>
             Register Admin
           </li>
-          <li
-            className={activePage === 'update-order' ? 'active' : ''}
-            onClick={() => setActivePage('update-order')}
-          >
+          <li className={activePage === 'update-order' ? 'active' : ''} onClick={() => setActivePage('update-order')}>
             Update Order
+          </li>
+          <li className={activePage === 'queries' ? 'active' : ''} onClick={() => setActivePage('queries')}>
+            User Queries {/* ✅ New Sidebar Option */}
           </li>
         </ul>
       </div>

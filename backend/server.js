@@ -354,6 +354,16 @@ app.post('/api/submit-query', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error. Please try again.' });
   }
 });
+// Fetch all queries for admin
+app.get('/api/get-queries', async (req, res) => {
+  try {
+    const queries = await Query.find(); // Fetch all queries from the database
+    res.status(200).json(queries);
+  } catch (error) {
+    console.error('Error fetching queries:', error);
+    res.status(500).json({ message: 'Failed to fetch queries' });
+  }
+});
 
 
 // Start the Server

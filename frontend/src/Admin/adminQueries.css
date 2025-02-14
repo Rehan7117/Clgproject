@@ -1,0 +1,25 @@
+.admin-queries {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+
+  }
+  
+  th {
+  background-color: #003366;
+    font-weight: bold;
+    color: white;
+  }
+  
