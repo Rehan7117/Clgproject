@@ -33,7 +33,7 @@ const AboutUs = () => {
             <p>
                 If you have any questions or need assistance, feel free to reach out to us at:
                 <br />
-                <strong>Email:</strong> support@[Transportation].com
+                <strong>Email:</strong> support@RidHub.com
                 <br />
                 <strong>Phone:</strong> +1 (234) 567-8901
             </p>

@@ -25,8 +25,7 @@ const BookingSchema = new mongoose.Schema(
     },
     dropLocation: {
       type: String,
-      required: true,
-      enum: ['Mumbai', 'Delhi', 'Kolkata', 'Surat'],
+      required: true,  // dropLocation is now a required string input
     },
     dropPhone: {
       type: String,

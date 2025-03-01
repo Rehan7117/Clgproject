@@ -160,24 +160,19 @@ const Contact = () => {
               onChange={(e) => setPickupPhone(e.target.value)}
               required
               placeholder="Enter pickup phone number"
-
               pattern="[0-9]{10}"
               title="Enter a 10-digit phone number"
             />
           </div>
           <div className="form-group">
             <label>Drop Location:</label>
-            <select
+            <input
+              type="text"
               value={dropLocation}
               onChange={(e) => setDropLocation(e.target.value)}
               required
-            >
-              <option value="">Select Location</option>
-              <option value="Mumbai">Mumbai</option>
-              <option value="Delhi">Delhi</option>
-              <option value="Kolkata">Kolkata</option>
-              <option value="Surat">Surat</option>
-            </select>
+              placeholder="Enter drop location"
+            />
           </div>
           <div className="form-group">
             <label>Drop Phone:</label>
@@ -187,7 +182,6 @@ const Contact = () => {
               onChange={(e) => setDropPhone(e.target.value)}
               required
               placeholder="Enter drop phone number"
-
               pattern="[0-9]{10}"
               title="Enter a 10-digit phone number"
             />

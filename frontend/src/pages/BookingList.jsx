@@ -37,7 +37,7 @@ const BookingList = () => {
 
   return (
     <div className="booking-list-container">
-      <h2>All Bookings</h2>
+      <h2>All Users Bookings</h2>
       {error && <p className="error-message">{error}</p>}
       {loading ? (
         <p>Loading bookings...</p>
